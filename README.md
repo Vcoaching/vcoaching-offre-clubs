@@ -52,7 +52,7 @@ Style commun à ajouter à chaque prompt : *photographie éditoriale sportive, l
 | Emplacement | Fichier | Source |
 |---|---|---|
 | hero | `assets/photo-hero.jpg` | https://unsplash.com/photos/LIhB1_mAGhY |
-| conférence | `assets/photo-conference.jpg` | images.unsplash.com/photo-1528036788076-c031f7707270 |
+| conférence | `assets/photo-conference.jpg` | images.unsplash.com/photo-1544531585-b3fadf704c02 |
 | consulting | `assets/photo-consulting.jpg` | images.unsplash.com/photo-1603202662747-00e33e7d1468 |
 | tournage | `assets/photo-tournage.jpg` | images.unsplash.com/photo-1777587537110-1488c9eaa362 |
 
