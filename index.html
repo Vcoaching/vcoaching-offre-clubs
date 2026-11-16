@@ -780,7 +780,7 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 56px; }
       <div class="carousel reveal" data-carousel aria-roledescription="carrousel">
         <div class="track">
         <article class="vcard c-blue">
-          <div class="video" data-youtube="" data-vimeo="" data-src="" data-poster="">
+          <div class="video" data-youtube="gLBrFAbfLPU" data-vimeo="" data-src="" data-poster="">
             <span class="video-label">Vidéo à intégrer</span>
             <button class="play" aria-label="Lire la vidéo : Tableaux noirs"><svg><use href="#i-play"/></svg></button>
           </div>
@@ -792,7 +792,7 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 56px; }
         </article>
 
         <article class="vcard c-purple">
-          <div class="video" data-youtube="" data-vimeo="" data-src="" data-poster="">
+          <div class="video" data-youtube="o-W_4dmoQxE" data-vimeo="" data-src="" data-poster="">
             <span class="video-label">Vidéo à intégrer</span>
             <button class="play" aria-label="Lire la vidéo : Conférences"><svg><use href="#i-play"/></svg></button>
           </div>
@@ -804,7 +804,7 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 56px; }
         </article>
 
         <article class="vcard c-green">
-          <div class="video" data-youtube="" data-vimeo="" data-src="" data-poster="">
+          <div class="video" data-youtube="__zXNKHnBag" data-vimeo="" data-src="" data-poster="">
             <span class="video-label">Vidéo à intégrer</span>
             <button class="play" aria-label="Lire la vidéo : Exo de…"><svg><use href="#i-play"/></svg></button>
           </div>
@@ -816,7 +816,7 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 56px; }
         </article>
 
         <article class="vcard c-orange">
-          <div class="video" data-youtube="" data-vimeo="" data-src="" data-poster="">
+          <div class="video" data-youtube="NuIA_o4xLoo" data-vimeo="" data-src="" data-poster="">
             <span class="video-label">Épisode à intégrer</span>
             <button class="play" aria-label="Écouter : Sur la route de l'entraînement"><svg><use href="#i-play"/></svg></button>
           </div>
@@ -1178,7 +1178,7 @@ document.querySelectorAll('.video').forEach(function (v) {
   if (poster) { v.style.background = 'center / cover no-repeat url("' + poster + '")'; v.classList.add('has-poster'); v.querySelector('.video-label').style.display = 'none'; }
   /* Photo seule (pas encore de vidéo) : pas de bouton lecture */
   if (poster && !hasSource) { v.querySelector('.play').style.display = 'none'; v.style.cursor = 'default'; }
-  else if (v.dataset.youtube) { v.style.background = 'center / cover no-repeat url("https://i.ytimg.com/vi/' + v.dataset.youtube + '/hqdefault.jpg")'; v.querySelector('.video-label').style.display = 'none'; }
+  else if (v.dataset.youtube) { v.style.background = 'center / cover no-repeat url("https://i.ytimg.com/vi/' + v.dataset.youtube + '/maxresdefault.jpg")'; v.querySelector('.video-label').style.display = 'none'; }
   v.addEventListener('click', function () {
     var yt = v.dataset.youtube, vm = v.dataset.vimeo, src = v.dataset.src, html = '';
     if (yt) html = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
