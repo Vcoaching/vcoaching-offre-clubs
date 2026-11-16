@@ -281,6 +281,13 @@ main { margin-left: 0; }
 .carousel .vbody { padding: 22px 22px 26px; }
 .carousel .vbody h3 { font-size: 24px; }
 .carousel .vbody p { font-size: 14.5px; }
+.car-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 18px; }
+.car-nav .dots { margin-top: 0; }
+.car-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-strong); background: none; color: var(--white); display: grid; place-items: center; cursor: pointer; transition: border-color .2s, background .2s; }
+.car-btn:hover { border-color: var(--red); background: rgba(224, 8, 21, .14); }
+.car-btn svg { width: 18px; height: 18px; }
+.car-btn[data-car="prev"] svg { transform: scaleX(-1); }
+.car-nav:has(.dots:empty) { display: none; }
 .dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
 .dots:empty { display: none; }
 .dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--line-strong); transition: width .3s, background .3s; }
@@ -827,7 +834,11 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 56px; }
           </div>
         </article>
         </div>
-        <div class="dots" aria-hidden="true"></div>
+        <div class="car-nav">
+          <button type="button" class="car-btn" data-car="prev" aria-label="Contenu précédent"><svg><use href="#i-arrow"/></svg></button>
+          <div class="dots" aria-hidden="true"></div>
+          <button type="button" class="car-btn" data-car="next" aria-label="Contenu suivant"><svg><use href="#i-arrow"/></svg></button>
+        </div>
       </div>
 
       <!-- Essai gratuit -->
@@ -1142,7 +1153,29 @@ document.querySelectorAll('[data-carousel]').forEach(function (car) {
   function markDot() {
     Array.prototype.forEach.call(dots.children, function (d, i) { d.classList.toggle('on', i === current); });
   }
+  var busy = false;
+  /* Une vidéo en cours est remise sur sa miniature avant de défiler (sinon elle se relancerait hors champ) */
+  function resetVideos() {
+    track.querySelectorAll('.video.playing').forEach(function (v) {
+      v.innerHTML = v._orig; v.classList.remove('playing'); v.style.cursor = '';
+    });
+  }
+  function prev() {
+    if (busy) return; busy = true; resetVideos();
+    var last = track.lastElementChild, step = last.getBoundingClientRect().width + GAP;
+    track.insertBefore(last, track.firstElementChild);
+    track.style.transform = 'translateX(' + (-step) + 'px)';
+    track.getBoundingClientRect();
+    track.classList.add('anim');
+    track.style.transform = 'none';
+    track.addEventListener('transitionend', function done() {
+      track.removeEventListener('transitionend', done);
+      track.classList.remove('anim'); busy = false;
+    });
+    current = (current - 1 + total) % total; markDot();
+  }
   function next() {
+    if (busy) return; busy = true; resetVideos();
     var first = track.firstElementChild, step = first.getBoundingClientRect().width + GAP;
     track.classList.add('anim');
     track.style.transform = 'translateX(' + (-step) + 'px)';
@@ -1150,7 +1183,7 @@ document.querySelectorAll('[data-carousel]').forEach(function (car) {
       track.removeEventListener('transitionend', done);
       track.classList.remove('anim');
       track.appendChild(first);
-      track.style.transform = 'none';
+      track.style.transform = 'none'; busy = false;
       current = (current + 1) % total; markDot();
     });
   }
@@ -1164,8 +1197,17 @@ document.querySelectorAll('[data-carousel]').forEach(function (car) {
   car.addEventListener('mouseenter', stop);
   car.addEventListener('mouseleave', start);
   car.addEventListener('focusin', stop);
-  /* Une vidéo lancée arrête le défilement */
-  car.addEventListener('click', function (e) { if (e.target.closest('.video')) { stopped = true; stop(); } });
+  /* Une vidéo lancée met le défilement automatique en pause ; flèches et glissement restent actifs */
+  car.addEventListener('click', function () { if (track.querySelector('.video.playing')) { stopped = true; stop(); } });
+  function manual(fn) { stopped = false; stop(); fn(); if (!car.matches(':hover')) start(); }
+  car.querySelector('[data-car="prev"]').addEventListener('click', function () { manual(prev); });
+  car.querySelector('[data-car="next"]').addEventListener('click', function () { manual(next); });
+  var x0 = null;
+  track.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; stop(); }, { passive: true });
+  track.addEventListener('touchend', function (e) {
+    if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) manual(dx < 0 ? next : prev); else start();
+  }, { passive: true });
   document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
   window.addEventListener('resize', layout);
   layout();
@@ -1184,7 +1226,7 @@ document.querySelectorAll('.video').forEach(function (v) {
     if (yt) html = '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(yt) + '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
     else if (vm) html = '<iframe src="https://player.vimeo.com/video/' + encodeURIComponent(vm) + '?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
     else if (src) html = '<video src="' + src + '" controls autoplay playsinline></video>';
-    if (html) { v.innerHTML = html; v.style.cursor = 'default'; }
+    if (html && !v.classList.contains('playing')) { v._orig = v.innerHTML; v.innerHTML = html; v.classList.add('playing'); v.style.cursor = 'default'; }
   });
 });
 
