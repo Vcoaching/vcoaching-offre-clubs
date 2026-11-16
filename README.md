@@ -54,6 +54,6 @@ Style commun à ajouter à chaque prompt : *photographie éditoriale sportive, l
 | hero | `assets/photo-hero.jpg` | https://unsplash.com/photos/LIhB1_mAGhY |
 | conférence | `assets/photo-conference.jpg` | images.unsplash.com/photo-1591115765373-5207764f72e7 (recadrée, logo mural masqué) |
 | consulting | `assets/photo-consulting.jpg` | images.unsplash.com/photo-1603202662747-00e33e7d1468 |
-| tournage | `assets/photo-tournage.jpg` | images.unsplash.com/photo-1552508996-b6356e9f7c64 |
+| tournage | `assets/photo-tournage.webp` | Visuel fourni par VESTIAIRES coaching |
 
 Pour remplacer une photo : changer `data-img` sur le bloc `.ph` correspondant (`data-pos` règle le cadrage).
